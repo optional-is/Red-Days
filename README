@@ -1,7 +1,9 @@
 This is a very simple HTML file designed to work as a "web clip" in iOS.
 
-It is a simple page which displays a list of up comming holidays or events and how many days away they are.
+It is a simple page which displays a list of upcoming holidays or events and how many days away they are.
 
 It also updates the home screen icon to reflect the next holiday.
 
 It is written in PHP to make it simple to deploy.
+
+Since this was for personal use, all the holidays are public bank holidays in Iceland. You can easily customise the holidays.php file for your own local. Be sure to adjust the timezone support.
