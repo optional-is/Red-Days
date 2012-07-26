@@ -1,5 +1,6 @@
 <?php header('Content-Type: text/cache-manifest'); ?>
 CACHE MANIFEST
+# Since we are dealing with dates, invalidate the cache monthly
 # <?=date('Y-m')?> version 1.3
 index.html
 events.json.php
