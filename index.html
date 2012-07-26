@@ -135,6 +135,10 @@
 
 		}
 		
+		var marginLeft = 0;
+	  	var maxMargin  = 0;
+		
+		
 		</script>
     </div>
 
@@ -148,6 +152,7 @@
 		<h1>(optional.is)</h1>
 	</footer>
 
+   <script type="application/javascript" src="events.json.php"></script>
    <script type="application/javascript">
 (function(){function J(a,b,c){c=a.slice((c||b)+1||a.length);a.length=b<0?a.length+b:b;return a.push.apply(a,c)}function K(a){return a.replace(/\-[a-z]/g,function(b){return b[1].toUpperCase()})}function E(a){return a.replace(/[A-Z]/g,function(b){return"-"+b.toLowerCase()})}function L(a){return a.firstChild===null?{UL:"LI",DL:"DT",TR:"TD"}[a.tagName]||a.tagName:a.firstChild.tagName}function M(a,b){if(typeof a==z)return N(a,L(b));else{b=n.createElement("div");b.appendChild(a);return b}}function N(a){var b=
 n.createElement("div");b.innerHTML=a;return b}function O(a){var b=/\S/;a.each(function(c){for(var d=c.firstChild,f=-1,e;d;){e=d.nextSibling;if(d.nodeType==3&&!b.test(d.nodeValue))c.removeChild(d);else d.nodeIndex=++f;d=e}})}function v(a){if(a._xuiEventID)return a._xuiEventID;return a._xuiEventID=++v.id}function B(a,b){a=u[a]=u[a]||{};return a[b]=a[b]||[]}function P(a,b,c){var d=v(a);b=B(d,b);d=function(f){if(c.call(a,f)===false){f.preventDefault();f.stopPropagation()}};d.guid=c.guid=c.guid||++v.id;
@@ -184,10 +189,116 @@ xui.extend({swipe:function(callback,options){var defaults={preventDefaultEvents:
     xui(document).on('touchmove', False); // prevents the page moving around
     xui('a').on('click', False); // ignores clicks
 
+	function dateDiff(date_value){
+		today=new Date();
+		var one_day=1000*60*60*24;
+
+		//Calculate difference btw the two dates, and convert to days
+		return Math.ceil(((date_value)-today.getTime())/(one_day))
+	}
+
+	function pluralize(singular,count){
+		if (count == 1){ return singular; }
+		switch(singular){
+			case 'day': return 'days'; break;
+		}
+	}
+	function ordinal(n){
+		var s='th';
+		if(n===1) s='st';
+		if(n===2) s='nd';
+		if(n===3) s='rd';
+		return n+s;
+	}
 	function init ()
     {
-    	x$("#holidays").xhr('inner','events.php');
+	
+		first = true;
+		event_str = '';
+		dots      = '';
+		counter = 0;
+		
+		for (var key in data) {
+			tkey = key*1000;
+			// do date diff to get actual days
+			daysDiff  = dateDiff(tkey);
+			day_str   = pluralize('day',daysDiff);
+			date_disp = new Date(tkey);
+			
+			if(daysDiff > 0){
+				event_str += '<div><p><strong>'+daysDiff+' '+day_str+' </strong> '+data[key]+'<br/>'+weekday[date_disp.getDay()]+', '+monthname[date_disp.getMonth()]+' '+ordinal(date_disp.getDate())+'</p></div>';
+				if (first){
+					first = false;
+					dots += '<span class="active">&bull;</span>';
+				} else {
+					dots += '<span>&bull;</span>';					
+				}
+				counter++;					
+			}
+			
+		}
+		maxMargin = (counter-1)*480;
+		x$("#holidays").html('inner',event_str)
+		x$(".dots").html('inner',dots)
+		
+		x$('#holidays').swipe(
+	    function(e, data){
+	            switch (data.type){
+	            case ('direction'):
+					if (data.direction == 'left'){  
+						marginLeft = marginLeft-480; 
+						if(Math.abs(marginLeft)>maxMargin){ marginLeft=maxMargin*-1; } 
+						
+						x$('#holidays').tween({ 'marginLeft':marginLeft+'px' });
+
+						x$('.dots span').each(function(element, index, xui) {
+							x$(this).attr('class','');
+							if (parseInt(index) == parseInt(Math.abs(marginLeft/480))){
+								x$(this).attr('class','active');
+							}
+						});
+
+					}
+					if (data.direction == 'right'){ 
+						marginLeft = marginLeft+480; 
+						if(marginLeft>0){ marginLeft=0; } 
+						x$('#holidays').tween({ 'marginLeft':marginLeft+'px' });
+						x$('.dots span').each(function(element, index, xui) {
+							x$(this).attr('class','');
+							if (parseInt(index) == parseInt(Math.abs(marginLeft/480))){
+								x$(this).attr('class','active');
+							}
+						});
+
+					}
+	            break;
+				case ('doubletap'):
+	            case ('longtap'):
+	            case ('simpletap'):
+					marginLeft = marginLeft-480; 
+					if(Math.abs(marginLeft)>maxMargin){ marginLeft=maxMargin*-1; } 
+					x$('#holidays').tween({ 'marginLeft':marginLeft+'px' });
+					x$('.dots span').each(function(element, index, xui) {
+						x$(this).attr('class','');
+						if (parseInt(index) == parseInt(Math.abs(marginLeft/480))){
+							x$(this).attr('class','active');
+						}
+					});
+	            break;
+	            }	
+
+
+	    }, {
+	        swipeCapture: true,
+	        longTapCapture: true,
+	        doubleTapCapture: true,
+	        simpleTapCapture: false
+
+	    }
+	    );
  	}
+
+
 
     var _timer=setInterval(function(){
         if(/loaded|complete/.test(document.readyState)){
