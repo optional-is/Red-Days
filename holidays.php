@@ -34,7 +34,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-05-01');
 	}
-	$days = dateDiff(time(),$target_day);
 	$red_days[$target_day] = 'May Day';			
 	
 	// June 17th
@@ -42,7 +41,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-06-17');
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day]='National Day';			
 
 	// Dec 25th
@@ -50,7 +48,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-12-25');
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day]='Christmas';			
 	
 	// Dec 31st
@@ -58,7 +55,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-12-31');
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day]='New Year\'s Eve';			
 
 
@@ -67,7 +63,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-01-01');
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='New Year\'s Day';			
 	
 	
@@ -80,7 +75,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-04-'.str_pad($t_day,2,'0',STR_PAD_LEFT));
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='First day of Summer';		
 	
 	// Sjómannadagurinn
@@ -91,7 +85,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = strtotime((date('Y')+1).'-06-'.str_pad($t_day,2,'0',STR_PAD_LEFT));
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Sjómannadagurinn';		
 
 	
@@ -99,12 +92,14 @@ function getRedDays(){
 	$t_day = date('N',strtotime(date('Y').'-08-01'));
 	if($t_day > 1){ $t_day = 9-$t_day; }
 	
-	$target_day = strtotime(date('Y').'-08-'.str_pad($t_day,2,'0',STR_PAD_LEFT));
+	$target_day = strtotime(date('Y').'-08-'.str_pad($t_day,2,'0',STR_PAD_LEFT));	
 	if(time() > $target_day){
+		$t_day = date('N',strtotime((date('Y')+1).'-08-01'));
+		if($t_day > 1){ $t_day = 9-$t_day; }
 		$target_day = strtotime((date('Y')+1).'-08-'.str_pad($t_day,2,'0',STR_PAD_LEFT));
 	}
-	$days = dateDiff(time(),$target_day);			
-	$red_days[$target_day] ='Verslunarmanna';		
+	
+	$red_days[$target_day] ='Verslunarmanna ';		
 	
 	// Easter Related Holidays!
 	$easter_day = getEaster();
@@ -112,7 +107,6 @@ function getRedDays(){
 	if(time() > $target_day){
 		$target_day = getEaster((date('Y')+1));
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Easter';		
 
 	// Easter Related Holidays!
@@ -122,7 +116,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('-2 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Good Friday';		
 
 	$target_day = $easter_day;
@@ -131,7 +124,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('-3 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Maundy Thursday';		
 	
 	$target_day = $easter_day;
@@ -140,7 +132,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('-7 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Palm Sunday';		
 
 	$target_day = $easter_day;
@@ -149,7 +140,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('+1 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Easter Monday';		
 	
 	$target_day = $easter_day;
@@ -158,7 +148,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('+40 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Ascension';		
 	
 	$target_day = $easter_day;
@@ -167,7 +156,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('+49 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Whitsun';		
 	
 	$target_day = $easter_day;
@@ -176,7 +164,6 @@ function getRedDays(){
 		$target_day = getEaster((date('Y')+1));
 		$target_day = strtotime('+50 days',$target_day);
 	}
-	$days = dateDiff(time(),$target_day);			
 	$red_days[$target_day] ='Whit Monday';		
 	
 	
