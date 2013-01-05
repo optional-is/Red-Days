@@ -99,7 +99,7 @@ function getRedDays(){
 		$target_day = strtotime((date('Y')+1).'-08-'.str_pad($t_day,2,'0',STR_PAD_LEFT));
 	}
 	
-	$red_days[$target_day] ='Verslunarmanna ';		
+	$red_days[$target_day] ='Verslunarmanna';		
 	
 	// Easter Related Holidays!
 	$easter_day = getEaster();
@@ -143,10 +143,10 @@ function getRedDays(){
 	$red_days[$target_day] ='Easter Monday';		
 	
 	$target_day = $easter_day;
-	$target_day = strtotime('+40 days',$target_day);
+	$target_day = strtotime('+39 days',$target_day);
 	if(time() > $target_day){
 		$target_day = getEaster((date('Y')+1));
-		$target_day = strtotime('+40 days',$target_day);
+		$target_day = strtotime('+39 days',$target_day);
 	}
 	$red_days[$target_day] ='Ascension';		
 	
